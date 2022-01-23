@@ -212,9 +212,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
     double cropHeight = height;
 
     if (widget.shape == CustomCropShape.Circle) {
-      final imageWidth = imageAsUIImage!.width;
-      final imageHeight = imageAsUIImage!.height;
-      cropWidth = max(imageWidth, imageHeight).toDouble();
+      cropWidth = cropWidth * widget.cropPercentage;
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
       if (width < height) {
