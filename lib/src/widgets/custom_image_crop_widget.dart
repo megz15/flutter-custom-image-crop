@@ -246,7 +246,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final defaultScale = cropWidth / max(imageWidth, imageHeight);
     final scale = data.scale * translateScale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
-    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
+    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(0.1))
       ..translate(translateScale * data.x + cropWidth / 2,
           translateScale * data.y + cropHeight / 2)
       ..scale(scale)
