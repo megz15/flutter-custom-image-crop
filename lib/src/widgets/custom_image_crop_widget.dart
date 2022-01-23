@@ -217,13 +217,8 @@ class _CustomImageCropState extends State<CustomImageCrop>
       cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
-      if (width < height) {
-        cropWidth = cropWidth * widget.cropPercentage;
-        cropHeight = cropWidth / widget.aspectRatio;
-      } else {
-        cropHeight = cropHeight * widget.cropPercentage;
-        cropWidth = cropHeight * widget.aspectRatio;
-      }
+      cropHeight = imageHeight;
+      cropWidth = imageWidth;
     }
 
     return {'cropWidth': cropWidth, 'cropHeight': cropHeight};
@@ -242,11 +237,11 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final sizeMap = _getCropSize(width, height);
     final cropWidth = sizeMap['cropWidth'] ?? 0;
     final cropHeight = sizeMap['cropHeight'] ?? 0;
-    final scale = data.scale.clamp(0.1, 10.0);
+    final scale = data.scale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3(1, 1, 1))
       ..translate(data.x + cropWidth / 2, data.y + cropHeight / 2)
-      ..scale(scale)
+      ..scale(scale * cropWidth / max(imageWidth, imageHeight))
       ..rotateZ(data.angle);
     final bgPaint = Paint()
       ..color = widget.backgroundColor
