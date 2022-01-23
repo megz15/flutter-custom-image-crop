@@ -243,7 +243,8 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final cropWidth = sizeMap['cropWidth'] ?? 0;
     final cropHeight = sizeMap['cropHeight'] ?? 0;
     final translateScale = cropWidth / uiWidth;
-    final scale = data.scale;
+    final defaultScale = cropWidth / max(imageWidth, imageHeight);
+    final scale = data.scale * defaultScale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
       ..translate(translateScale * data.x + cropWidth / 2,
