@@ -212,7 +212,9 @@ class _CustomImageCropState extends State<CustomImageCrop>
     double cropHeight = height;
 
     if (widget.shape == CustomCropShape.Circle) {
-      cropWidth = cropWidth = max(imageWidth, imageHeight).toDouble();
+      final imageWidth = imageAsUIImage!.width;
+      final imageHeight = imageAsUIImage!.height;
+      cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
       if (width < height) {
@@ -232,8 +234,6 @@ class _CustomImageCropState extends State<CustomImageCrop>
     if (imageAsUIImage == null) {
       return null;
     }
-    final imageWidth = imageAsUIImage!.width;
-    final imageHeight = imageAsUIImage!.height;
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final uiWidth = min(width, height) * widget.cropPercentage;
