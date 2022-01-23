@@ -249,7 +249,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final matrix4Image = Matrix4.diagonal3(
       vector_math.Vector3(scale, scale, scale))
       ..rotateZ(data.angle)
-      ..translate(-image.width / 2, -image.height / 2);
+      ..translate(-imageWidth / 2, -imageHeight / 2);
     final bgPaint = Paint()
       ..color = widget.backgroundColor
       ..style = PaintingStyle.fill;
