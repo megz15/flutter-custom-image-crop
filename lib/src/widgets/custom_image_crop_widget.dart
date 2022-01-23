@@ -234,6 +234,8 @@ class _CustomImageCropState extends State<CustomImageCrop>
     if (imageAsUIImage == null) {
       return null;
     }
+    final imageWidth = imageAsUIImage!.width;
+    final imageHeight = imageAsUIImage!.height;
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final uiWidth = min(width, height) * widget.cropPercentage;
