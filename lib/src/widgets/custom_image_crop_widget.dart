@@ -210,10 +210,11 @@ class _CustomImageCropState extends State<CustomImageCrop>
   Map<String, double> _getCropSize(double width, double height) {
     double cropWidth = width;
     double cropHeight = height;
+    
+    final imageWidth = imageAsUIImage!.width;
+    final imageHeight = imageAsUIImage!.height;
 
     if (widget.shape == CustomCropShape.Circle) {
-      final imageWidth = imageAsUIImage!.width;
-      final imageHeight = imageAsUIImage!.height;
       cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
