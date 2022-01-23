@@ -210,16 +210,20 @@ class _CustomImageCropState extends State<CustomImageCrop>
   Map<String, double> _getCropSize(double width, double height) {
     double cropWidth = width;
     double cropHeight = height;
-    
-    final imageWidth = imageAsUIImage!.width;
-    final imageHeight = imageAsUIImage!.height;
 
     if (widget.shape == CustomCropShape.Circle) {
+      final imageWidth = imageAsUIImage!.width;
+      final imageHeight = imageAsUIImage!.height;
       cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
-      cropHeight = imageHeight.toDouble();
-      cropWidth = imageWidth.toDouble();
+      if (width < height) {
+        cropWidth = cropWidth * widget.cropPercentage;
+        cropHeight = cropWidth / widget.aspectRatio;
+      } else {
+        cropHeight = cropHeight * widget.cropPercentage;
+        cropWidth = cropHeight * widget.aspectRatio;
+      }
     }
 
     return {'cropWidth': cropWidth, 'cropHeight': cropHeight};
@@ -238,10 +242,13 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final sizeMap = _getCropSize(width, height);
     final cropWidth = sizeMap['cropWidth'] ?? 0;
     final cropHeight = sizeMap['cropHeight'] ?? 0;
-    final scale = data.scale;
+    final translateScale = cropWidth / uiWidth;
+    final defaultScale = cropWidth / max(imageWidth, imageHeight);
+    final scale = data.scale * translateScale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
-    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3(1, 1, 1))
-      ..translate(data.x + cropWidth / 2, data.y + cropHeight / 2)
+    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
+      ..translate(translateScale * data.x + cropWidth / 2,
+          translateScale * data.y + cropHeight / 2)
       ..scale(scale)
       ..rotateZ(data.angle);
     final bgPaint = Paint()
