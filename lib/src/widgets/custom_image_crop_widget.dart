@@ -238,17 +238,18 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final imageHeight = imageAsUIImage!.height;
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
-    final uiWidth = width * widget.cropPercentage;
-    final uiHeight = height * widget.cropPercentage;
     final sizeMap = _getCropSize(width, height);
-    final cropWidth = sizeMap['cropWidth'] ?? 0;
-    final cropHeight = sizeMap['cropHeight'] ?? 0;
-    final defaultScale = cropWidth / imageWidth;
-    final scale = data.scale * defaultScale;
+    final uiWidth = sizeMap['cropWidth'] ?? 0;
+    final uiHeight = sizeMap['cropHeight'] ?? 0;
+    final cropWidth = imageWidth.toDouble();
+    final cropHeight = imageHeight.toDouble();
+    final translateScaleX = cropWidth / uiWidth;
+    final translateScaleY = cropHeight / uiHeight;
+    final scale = data.scale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
-      ..translate(cropWidth / uiWidth * data.x + cropWidth / 2,
-          cropHeight / uiHeight * data.y + cropHeight / 2)
+      ..translate(translateScaleX * data.x + cropWidth / 2,
+          translateScaleY * data.y + cropHeight / 2)
       ..scale(scale)
       ..rotateZ(data.angle);
     final bgPaint = Paint()
