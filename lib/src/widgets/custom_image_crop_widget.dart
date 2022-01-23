@@ -218,8 +218,8 @@ class _CustomImageCropState extends State<CustomImageCrop>
       cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
-      cropHeight = imageHeight;
-      cropWidth = imageWidth;
+      cropHeight = imageHeight.toDouble();
+      cropWidth = imageWidth.toDouble();
     }
 
     return {'cropWidth': cropWidth, 'cropHeight': cropHeight};
