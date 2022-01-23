@@ -246,11 +246,10 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final defaultScale = cropWidth / max(imageWidth, imageHeight);
     final scale = data.scale * defaultScale;
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
-    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
-      ..translate(translateScale * data.x + cropWidth / 2,
-          translateScale * data.y + cropHeight / 2)
-      ..scale(scale)
-      ..rotateZ(data.angle);
+    final matrix4Image = Matrix4.diagonal3(
+      vector_math.Vector3(scale, scale, scale))
+      ..rotateZ(data.angle)
+      ..translate(-image.width / 2, -image.height / 2);
     final bgPaint = Paint()
       ..color = widget.backgroundColor
       ..style = PaintingStyle.fill;
