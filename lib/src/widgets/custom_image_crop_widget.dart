@@ -242,9 +242,9 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final sizeMap = _getCropSize(width, height);
     final cropWidth = sizeMap['cropWidth'] ?? 0;
     final cropHeight = sizeMap['cropHeight'] ?? 0;
-    final scale = data.scale;
+    final scale = data.scale.clamp(0.1, 10.0);
     final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
-    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3(1, 1, 0))
+    final matrix4Image = Matrix4.diagonal3(vector_math.Vector3(1, 1, 1))
       ..translate(data.x + cropWidth / 2, data.y + cropHeight / 2)
       ..scale(scale)
       ..rotateZ(data.angle);
