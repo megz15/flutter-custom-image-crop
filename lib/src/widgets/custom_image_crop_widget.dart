@@ -248,7 +248,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
       ..translate(translateScale * data.x + cropWidth / 2,
           translateScale * data.y + cropHeight / 2)
-      ..scale(scale * widget.aspectRatio)
+      ..scale(scale * 0.5)
       ..rotateZ(data.angle);
     final bgPaint = Paint()
       ..color = widget.backgroundColor
