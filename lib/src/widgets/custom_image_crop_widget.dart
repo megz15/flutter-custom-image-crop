@@ -234,15 +234,15 @@ class _CustomImageCropState extends State<CustomImageCrop>
     if (imageAsUIImage == null) {
       return null;
     }
-    final imageWidth = imageAsUIImage!.width;
-    final imageHeight = imageAsUIImage!.height;
+    final imageWidth = imageAsUIImage!.width.toDouble();
+    final imageHeight = imageAsUIImage!.height.toDouble();
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final sizeMap = _getCropSize(width, height);
     final uiWidth = sizeMap['cropWidth'] ?? 0;
     final uiHeight = sizeMap['cropHeight'] ?? 0;
-    final cropWidth = imageWidth.toDouble();
-    final cropHeight = imageHeight.toDouble();
+    final cropWidth = imageWidth;
+    final cropHeight = imageHeight;
     final translateScaleX = cropWidth / uiWidth;
     final translateScaleY = cropHeight / uiHeight;
     final scale = data.scale;
