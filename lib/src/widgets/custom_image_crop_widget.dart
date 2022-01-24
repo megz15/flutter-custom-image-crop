@@ -234,15 +234,15 @@ class _CustomImageCropState extends State<CustomImageCrop>
     if (imageAsUIImage == null) {
       return null;
     }
-    final imageWidth = imageAsUIImage!.width.toDouble();
-    final imageHeight = imageAsUIImage!.height.toDouble();
+    final imageWidth = imageAsUIImage!.width;
+    final imageHeight = imageAsUIImage!.height;
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final sizeMap = _getCropSize(width, height);
     final uiWidth = sizeMap['cropWidth'] ?? 0;
     final uiHeight = sizeMap['cropHeight'] ?? 0;
-    final cropWidth = imageWidth;
-    final cropHeight = imageHeight;
+    final cropWidth = imageWidth.toDouble();
+    final cropHeight = imageHeight.toDouble();
     final translateScaleX = cropWidth / uiWidth;
     final translateScaleY = cropHeight / uiHeight;
     final scale = data.scale;
@@ -255,7 +255,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final bgPaint = Paint()
       ..color = widget.backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(0, 0, imageWidth, imageHeight), bgPaint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, imageWidth.toDouble(), imageHeight.toDouble()), bgPaint);
     canvas.save();
     canvas.clipPath(clipPath);
     canvas.transform(matrix4Image.storage);
