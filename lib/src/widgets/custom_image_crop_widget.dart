@@ -210,11 +210,11 @@ class _CustomImageCropState extends State<CustomImageCrop>
   Map<String, double> _getCropSize(double width, double height) {
     double cropWidth = width;
     double cropHeight = height;
-    final imageWidth = imageAsUIImage!.width;
-    final imageHeight = imageAsUIImage!.height;
 
     if (widget.shape == CustomCropShape.Circle) {
-      cropWidth = imageWidth.toDouble();
+      final imageWidth = imageAsUIImage!.width;
+      final imageHeight = imageAsUIImage!.height;
+      cropWidth = max(imageWidth, imageHeight).toDouble();
       cropHeight = cropWidth;
     } else if (widget.shape == CustomCropShape.Square) {
       if (width < height) {
@@ -238,28 +238,26 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final imageHeight = imageAsUIImage!.height;
     final pictureRecorder = ui.PictureRecorder();
     final canvas = Canvas(pictureRecorder);
+    final uiWidth = min(width, height) * widget.cropPercentage;
     final sizeMap = _getCropSize(width, height);
-    final uiWidth = sizeMap['cropWidth'] ?? 0;
-    final uiHeight = sizeMap['cropHeight'] ?? 0;
-    final cropWidth = imageWidth.toDouble();
-    final cropHeight = imageHeight.toDouble();
-    final translateScaleX = cropWidth / uiWidth;
-    final translateScaleY = cropHeight / uiHeight;
+    final cropWidth = sizeMap['cropWidth'] ?? 0;
+    final cropHeight = sizeMap['cropHeight'] ?? 0;
+    final translateScale = cropWidth / uiWidth;
     final scale = data.scale;
-    final clipPath = Path.from(_getPath(uiWidth, uiHeight, uiWidth, uiHeight));
+    final clipPath = Path.from(_getPath(cropWidth, cropHeight, cropWidth, cropHeight));
     final matrix4Image = Matrix4.diagonal3(vector_math.Vector3.all(1))
-      ..translate(translateScaleX * data.x + uiWidth / 2,
-          translateScaleY * data.y + uiHeight / 2)
+      ..translate(translateScale * data.x + cropWidth / 2,
+          translateScale * data.y + cropHeight / 2)
       ..scale(scale)
       ..rotateZ(data.angle);
     final bgPaint = Paint()
       ..color = widget.backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(0, 0, imageWidth.toDouble(), imageHeight.toDouble()), bgPaint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, cropWidth, cropHeight), bgPaint);
     canvas.save();
     canvas.clipPath(clipPath);
     canvas.transform(matrix4Image.storage);
-    canvas.drawImage(imageAsUIImage!, Offset(-cropWidth / 2, -cropHeight / 2),
+    canvas.drawImage(imageAsUIImage!, Offset(-imageWidth / 2, -imageHeight / 2),
         widget.imagePaintDuringCrop);
     canvas.restore();
 
@@ -270,7 +268,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
 
     ui.Picture picture = pictureRecorder.endRecording();
     ui.Image image =
-        await picture.toImage(imageWidth.floor(), imageHeight.floor());
+        await picture.toImage(cropWidth.floor(), cropHeight.floor());
 
     // Adding compute would be preferrable. Unfortunately we cannot pass an ui image to this.
     // A workaround would be to save the image and load it inside of the isolate
