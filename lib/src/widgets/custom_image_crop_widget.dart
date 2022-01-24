@@ -255,11 +255,11 @@ class _CustomImageCropState extends State<CustomImageCrop>
     final bgPaint = Paint()
       ..color = widget.backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(0, 0, cropWidth, cropHeight), bgPaint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, imageWidth, imageHeight), bgPaint);
     canvas.save();
     canvas.clipPath(clipPath);
     canvas.transform(matrix4Image.storage);
-    canvas.drawImage(imageAsUIImage!, Offset(-imageWidth / 2, -imageHeight / 2),
+    canvas.drawImage(imageAsUIImage!, Offset(-cropWidth / 2, -cropHeight / 2),
         widget.imagePaintDuringCrop);
     canvas.restore();
 
@@ -270,7 +270,7 @@ class _CustomImageCropState extends State<CustomImageCrop>
 
     ui.Picture picture = pictureRecorder.endRecording();
     ui.Image image =
-        await picture.toImage(cropWidth.floor(), cropHeight.floor());
+        await picture.toImage(imageWidth.floor(), imageHeight.floor());
 
     // Adding compute would be preferrable. Unfortunately we cannot pass an ui image to this.
     // A workaround would be to save the image and load it inside of the isolate
